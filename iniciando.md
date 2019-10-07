@@ -6,7 +6,7 @@ Phaser, atualmente na versão [3.19.0](https://github.com/photonstorm/phaser/tre
 
 Para desenvolver projetos com Phaser são necessárias as ferramentas:
 
-* servidor web local (recomendo o [**http-server**](https://npmjs.org/package/http-server))
+* servidor web local (recomendo o [**http-server**](https://npmjs.org/package/http-server) e a extensão **Live Server** para o Visual Studio Code)
 * editor de códigos (recomendo o [**Visual Studio Code**](https://code.visualstudio.com/))
 * [documentação oficial](https://photonstorm.github.io/phaser3-docs/)
 * [exemplos](https://phaser.io/examples) (também disponíveis [neste repositório](https://github.com/photonstorm/phaser3-examples))

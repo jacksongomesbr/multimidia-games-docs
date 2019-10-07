@@ -317,3 +317,81 @@ function collectStar(player, star) {
 ```
 
 O código atualiza o valor da variável `score` e chama o método `setText()` para definir o novo texto (com a pontuação atualizada). Nesse caso, cada estrela coletada vale 10 pontos.
+
+## Parte 9: Vilões
+
+Acompanhe o resultado final dessa parte no arquivo `parte-9.html`.
+
+Já temos a pontuação do jogo para quando o jogador coletar estrelas. Agora é hora de adicionar alguns vilões, o que aumentará o desafio e dará um novo propósito ao jogo. 
+
+A ideia é: Quando você coletar todas as estrelas pela primeira vez, será lançada uma bomba saltitante. A bomba ficará pulando aleatoriamente pela fase e, se você colidir com ela, você morre. Todas as estrelas irão reaparecer para que você as colete de novo, e se você o fizer, uma nova bomba será lançada. Isto irá dar ao jogador um desafio: conseguir a pontuação mais alta sem morrer.
+
+Vamos começar adicionando duas variáveis do script: `bombs`, para conter o grupo de bombas, e `gameOver`, para controlar a lógica de execução do jogo (inicializa com o valor `false` e recebe `true` quando o jogador morrer -- termina o jogo). Na sequência, carregamos a imagem da bomba no `preload()` usando `load.image()`.
+
+Depois, criamos um [`Group` de física](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Group.html) para as bombas (variável `bombs`) e também definimos as colisões. Fazemos isso adicionando o seguinte ao método `create()`:
+
+```javascript
+bombs = this.physics.add.group();
+this.physics.add.collider(bombs, platforms);
+this.physics.add.collider(player, bombs, hitBomb, null, this);
+```
+
+As bombas vão quicar nas plataformas e, se o jogador encostar em alguma delas, chamamos a função `hitBomb()`:
+
+```javascript
+function hitBomb(player, bomb) {
+    this.physics.pause();
+    player.setTint(0xff0000);
+    player.anims.play('turn');
+    gameOver = true;
+}
+```
+
+O código faz uma pausa no sistema de física ([`physics.pause()`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html#pause)), pinta o jogador de vermelho ([`setTint()`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Sprite.html#setTint)), toca a animação "turn" ([`player.anims.play()`](https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Animation.html#play)) e indica que o jogo terminou (`gameOver = true`).
+
+Na sequência, modificamos a função `collectStar()`:
+
+```javascript
+function collectStar(player, star) {
+    star.disableBody(true, true);
+
+    score += 10;
+    scoreText.setText('Score: ' + score);
+
+    if (stars.countActive(true) === 0) {
+        stars.children.iterate(function (child) {
+            child.enableBody(true, child.x, 0, true, true);
+        });
+
+        var x = (player.x < 400) ? 
+            Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+        var bomb = bombs.create(x, 16, 'bomb');
+        bomb.setBounce(1);
+        bomb.setCollideWorldBounds(true);
+        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        bomb.allowGravity = false;
+    }
+}
+```
+
+O método [`countActive()`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Group.html#countActive) permite saber quantos elementos do grupo (as estrelas) estão ativas (não foram coletadas ainda). Se não houver uma estrela ativa, então o jogador coletou todas, com isso usamos a função [`stars.children.iterate()`](https://photonstorm.github.io/phaser3-docs/Phaser.Structs.Set.html#iterate) para habilitar todas as estrelas do grupo novamente e redefinir suas posições para zero para que elas caiam do topo da tela de novo.
+
+Na sequência, o código cria a bomba. Para isso, define um valor aleatório para a coordenada $x$, sempre de um lado oposto ao do jogador (veja que é possível saber a posição do jogador no eixo $x$ usando [`player.x`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#x)) (experimente desconsiderar isso para verificar se aumenta o nível de dificuldade). O restante do código faz o seguinte:
+
+1. cria uma bomba no conjunto de bombas (`bombs.create()`)
+2. define o quique ([`setBounce()`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#setBounce))
+3. configura para colidir com o mundo ([`setCollideWorldBounds()`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#setCollideWorldBounds))
+4. configura para ter uma velocidade aleatória no eixo $x$ e constante no eixo $y$ ([`setVelocity()`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#setVelocity))
+5. configura para ter a posição afetada pela gravidade ([`allowGravity`](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#allowGravity))
+
+Para finalizar, adicione o seguinte no início da função `update()`:
+
+```javascript
+if (gameOver) {
+    return;
+}
+```
+
+O código checa se o jogo terminou (o jogador foi atingido por uma bomba). Em caso positivo, termina a execução da função (o jogo dará a impressão de estar "travado").
+
