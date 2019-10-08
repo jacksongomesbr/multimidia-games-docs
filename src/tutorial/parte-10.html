@@ -33,9 +33,7 @@
                 update: update
             }
         };
-        var jogador = {nick, score}
-        var nick = prompt("Insira seu nickname", "name");
-        jogador.nick = nick;
+        var nick = prompt("Insira seu nickname");
         var player;
         var stars;
         var bombs;
@@ -70,6 +68,7 @@
 
             player.setBounce(0.2);
             player.setCollideWorldBounds(true);
+            
 
             this.anims.create({
                 key: 'left',
@@ -113,6 +112,14 @@
             this.physics.add.collider(bombs, bombs);
             this.physics.add.overlap(player, stars, collectStar, null, this);
             this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+            var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+            var bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            bomb.allowGravity = false;
         }
 
         function update() {
@@ -157,7 +164,7 @@
                 bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
                 bomb.allowGravity = false;
             }
-            jogador.score = score;
+            localStorage.setItem(nick, score);
         }
 
         function hitBomb(player, bomb) {
@@ -165,9 +172,16 @@
             player.setTint(0xff0000);
             player.anims.play('turn');
             gameOver = true;
-            localStorage.setItem("dadosJogador", jogador);
-            console.log(jogador)
-
+            function SortLocalStorage(){
+                if(localStorage.length > 0){
+                    var localStorageArray = new Array();
+                    for (i=0;i<localStorage.length;i++){
+                        localStorageArray[i] = localStorage.key(i)+localStorage.getItem(localStorage.key(i));
+                    }
+                }
+                var sortedArray = localStorageArray.sort();
+                return sortedArray;
+            }
         }
 
     </script>
