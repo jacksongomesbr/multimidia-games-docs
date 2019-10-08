@@ -165,6 +165,9 @@
             player.setTint(0xff0000);
             player.anims.play('turn');
             gameOver = true;
+            localStorage.setItem("dadosJogador", jogador);
+            console.log(jogador)
+
         }
 
     </script>
