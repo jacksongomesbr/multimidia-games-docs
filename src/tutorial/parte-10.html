@@ -33,7 +33,7 @@
                 update: update
             }
         };
-        var jogador = new Jogador(nick, score);
+        var jogador = {nick, score}
         var nick = prompt("Insira seu nickname", "name");
         jogador.nick = nick;
         var player;
@@ -165,7 +165,6 @@
             player.setTint(0xff0000);
             player.anims.play('turn');
             gameOver = true;
-
         }
 
     </script>
