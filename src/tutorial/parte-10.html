@@ -9,6 +9,23 @@
         body {
             margin: 0;
         }
+        /* Button styling*/
+        .button {
+            font-size: 1.5em;
+            
+            cursor: pointer;
+            
+            width:8em;
+            padding: 10px 10px 10px 10px;
+            margin: 05px;
+            
+            background: #ffffff;
+            border: solid #CC97FF 2px;
+            color: #21572F;
+            
+            -webkit-border-radius: 10px;
+            box-shadow: -5px 5px 0px #773ECD; 
+        }
     </style>
 </head>
 
@@ -129,7 +146,6 @@
             this.physics.add.overlap(player, stars, collectStar, null, this);
             this.physics.add.collider(player, bombs, hitBomb, null, this);
 
-
             // Formulario de entrada nick 
             var element = this.add.dom(400, 0).createFromCache('nameform');
             element.addListener('click');
@@ -159,12 +175,9 @@
             this.tweens.add({
                 targets: element,
                 y: 300,
-                duration: 3000,
+                duration: 0,
                 ease: 'Power3'
                 });
-
-            
-
         }
 
         function update() {
@@ -244,15 +257,12 @@
         function hitBomb(player, bomb) {
             this.add.image(400, 300, 'rank');
 
-            // apresenta nome game over
-            gameOver = this.add.text(400, 100, 'GAME OVER', { fontSize: '82px', fill: '#000' });
-            gameOver.setOrigin(0.5);
             // Text rank top 10
-            rankExibicao = this.add.text(400, 160, 'RANK TOP 10', { fontSize: '20px', fill: '#000' });
+            rankExibicao = this.add.text(400, 195, 'RANK TOP 10', { fontSize: '20px', fill: '#000' });
             rankExibicao.setOrigin(0.5);
 
             // variavel para exibição 
-            rankExibicao = this.add.text(400, 290, '', { fontSize: '20px', fill: '#000' });
+            rankExibicao = this.add.text(400, 330, '', { fontSize: '19px', fill: '#000' });
             rankExibicao.setOrigin(0.5);
 
 
@@ -262,18 +272,18 @@
             var rank = [];
             if(jogadores.length>=10){
                 for(i=0;i<10;i++){
-                    rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
+                    rank.push(['Jogador: ' + jogadores[i].jogador + ' ('+ jogadores[i].pontuacao] + ' pontos)');
                 }
             }else{
                 for(i=0;i<jogadores.length;i++){
-                    rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
+                    rank.push(['Jogador: ' + jogadores[i].jogador + ' ('+ jogadores[i].pontuacao] + ' pontos)');
                 }
             }
 
-            var btn = this.add.dom(400, 500).createFromCache('buttonreset');   
+            var btn = this.add.dom(400, 470).createFromCache('buttonreset');   
             btn.addListener('click');
             btn.on('click', function (event) {
-             // Recarrega a página
+            // Recarrega a página
                 location.reload();
             });
 
