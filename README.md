@@ -1,4 +1,5 @@
 Desenvolvimento de jogos com Phaser.
+
 Para adicionar gameover ao final da partida
 ```javascript
 gameOverText = this.add.text(90, 170, 'Game Over!', { fontSize: '80px', fill: '#000' });
