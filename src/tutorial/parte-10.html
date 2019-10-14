@@ -48,7 +48,7 @@
         var score = 0;
         var gameOver = false;
         var scoreText;
-   
+        var rank;
 
         var game = new Phaser.Game(config);
 
@@ -63,7 +63,7 @@
         }
 
         function create() {
-            verificaLocalStorage();
+            
             this.add.image(400, 300, 'sky');
 
             platforms = this.physics.add.staticGroup();
@@ -114,7 +114,8 @@
             bombs = this.physics.add.group();
 
             scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
+            // gameOver = this.add.text(400, 200, 'GAME OVER', { fontSize: '32px', fill: '#000' });
+            // gameOver.setOrigin(0.5);
             this.physics.add.collider(player, platforms);
             this.physics.add.collider(stars, platforms);
             this.physics.add.collider(bombs, platforms);
@@ -122,6 +123,8 @@
             this.physics.add.overlap(player, stars, collectStar, null, this);
             this.physics.add.collider(player, bombs, hitBomb, null, this);
 
+
+            // Formulario de entrada nick 
             var element = this.add.dom(400, 0).createFromCache('nameform');
             element.addListener('click');
             element.on('click', function (event) {
@@ -203,14 +206,13 @@
             localStorage.setItem(nick,score);
         }
 
-        function verificaLocalStorage(){
+        function rank_jogador(){
             var rank = [];
             if(localStorage.length>0){
                 for(i=0; i<localStorage.length;i++){
                     rank.push({jogador:localStorage.key(i),pontuacao:localStorage.getItem(localStorage.key(i))});
                 }
             }
-            console.log(rank);
 
             rank.sort(function (a, b) {
                 if (a.pontuacao < b.pontuacao) {
@@ -222,11 +224,18 @@
                 // a must be equal to b
                 return 0;
             });
-            console.log(rank);
+            return rank;
         }
 
         function hitBomb(player, bomb) {
-           
+            text = this.add.text(100, 55, '', { fontSize: '32px', fill: '#000' });
+            var jogadores = rank_jogador();
+            var rank = [];
+            for(i=0;i<jogadores.length;i++){
+                rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação'+ jogadores[i].pontuacao]);
+            }
+
+            text.setText(rank);
 
             this.physics.pause();
             player.setTint(0xff0000);
@@ -245,3 +254,4 @@
 
 <!-- Site referência entrada de dados https://labs.phaser.io/edit.html?src=src/game%20objects/dom%20element/input%20test.js&v=3.20.0 -->
 <!-- Site referência Salvar local storage https://www.youtube.com/watch?v=CSfpEMWHnYg -->
+<!-- Site referência Ordenação https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort -->
