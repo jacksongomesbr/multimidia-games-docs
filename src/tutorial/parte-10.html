@@ -55,7 +55,11 @@
 
 
         function preload() {
+            // carrega template html de entrada de nick
             this.load.html('nameform', 'assets/nameform.html');
+            // imagem de fundo rank
+            this.load.image('rank', 'assets/rank.png');
+
             this.load.image('sky', 'assets/sky.png');
             this.load.image('ground', 'assets/platform.png');
             this.load.image('star', 'assets/star.png');
@@ -233,23 +237,37 @@
         }
 
         function hitBomb(player, bomb) {
+            this.add.image(400, 300, 'rank');
+
             // apresenta nome game over
-            gameOver = this.add.text(400, 200, 'GAME OVER', { fontSize: '82px', fill: '#000' });
+            gameOver = this.add.text(400, 100, 'GAME OVER', { fontSize: '82px', fill: '#000' });
             gameOver.setOrigin(0.5);
+            // Text rank top 10
+            rankExibicao = this.add.text(400, 160, 'RANK TOP 10', { fontSize: '20px', fill: '#000' });
+            rankExibicao.setOrigin(0.5);
+
             // variavel para exibição 
-            text = this.add.text(400, 290, '', { fontSize: '20px', fill: '#000' });
-            text.setOrigin(0.5);
+            rankExibicao = this.add.text(400, 290, '', { fontSize: '20px', fill: '#000' });
+            rankExibicao.setOrigin(0.5);
 
 
             // varivel jogadores recebe lista ordenada da função rank_jogador
             var jogadores = rank_jogador();
-            // seta valores do array de jogadores para uma nova variavel para exibição em tela
+            // seta os 10 melhores jogadores para uma nova variavel que será exibição em tela
             var rank = [];
-            for(i=0;i<jogadores.length;i++){
-                rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
+            if(jogadores.length>=10){
+                for(i=0;i<10;i++){
+                    rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
+                }
+            }else{
+                for(i=0;i<jogadores.length;i++){
+                    rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
+                }
             }
+
+
             // manda para exibição
-            text.setText(rank);
+            rankExibicao.setText(rank);
 
             this.physics.pause();
             player.setTint(0xff0000);
