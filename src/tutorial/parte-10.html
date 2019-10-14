@@ -49,6 +49,7 @@
         var gameOver = false;
         var scoreText;
         var rank;
+        var iniciar = false;
 
         var game = new Phaser.Game(config);
 
@@ -98,7 +99,7 @@
                 frameRate: 10,
                 repeat: -1
             });
-
+            
             cursors = this.input.keyboard.createCursorKeys();
 
             stars = this.physics.add.group({
@@ -135,7 +136,7 @@
                         this.removeListener('click');
                 //  Ocultar o elemento de login
                         this.setVisible(false);
-
+                        iniciar = true;
                     }else{
                         // Pisca o prompt
                         this.scene.tweens.add({
@@ -163,23 +164,25 @@
             if (gameOver) {
                 return;
             }
+            if (iniciar == true){           
+                if (cursors.left.isDown) {
+                    player.setVelocityX(-160);
+                    player.anims.play('left', true);
+                }
+                else if (cursors.right.isDown) {
+                    player.setVelocityX(160);
+                    player.anims.play('right', true);
+                }
+                else {
+                    player.setVelocityX(0);
+                    player.anims.play('turn');
+                }
 
-            if (cursors.left.isDown) {
-                player.setVelocityX(-160);
-                player.anims.play('left', true);
+                if (cursors.up.isDown && player.body.touching.down) {
+                    player.setVelocityY(-330);
+                }
             }
-            else if (cursors.right.isDown) {
-                player.setVelocityX(160);
-                player.anims.play('right', true);
-            }
-            else {
-                player.setVelocityX(0);
-                player.anims.play('turn');
-            }
-
-            if (cursors.up.isDown && player.body.touching.down) {
-                player.setVelocityY(-330);
-            }
+ 
         }
 
         function collectStar(player, star) {
@@ -206,6 +209,7 @@
         }
 
         function rank_jogador(){
+            // pega valores do localStorage e armazena em variavel rank
             var rank = [];
             if(localStorage.length>0){
                 for(i=0; i<localStorage.length;i++){
@@ -213,6 +217,7 @@
                 }
             }
 
+            // Função ordena em ordem crescente
             rank.sort(function (a, b) {
                 if (a.pontuacao < b.pontuacao) {
                     return 1;
@@ -223,22 +228,27 @@
                 // a must be equal to b
                 return 0;
             });
+
             return rank;
         }
 
         function hitBomb(player, bomb) {
+            // apresenta nome game over
             gameOver = this.add.text(400, 200, 'GAME OVER', { fontSize: '82px', fill: '#000' });
             gameOver.setOrigin(0.5);
+            // variavel para exibição 
             text = this.add.text(400, 290, '', { fontSize: '20px', fill: '#000' });
             text.setOrigin(0.5);
 
 
+            // varivel jogadores recebe lista ordenada da função rank_jogador
             var jogadores = rank_jogador();
+            // seta valores do array de jogadores para uma nova variavel para exibição em tela
             var rank = [];
             for(i=0;i<jogadores.length;i++){
                 rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
             }
-
+            // manda para exibição
             text.setText(rank);
 
             this.physics.pause();
