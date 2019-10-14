@@ -63,6 +63,7 @@
         }
 
         function create() {
+            verificaLocalStorage();
             this.add.image(400, 300, 'sky');
 
             platforms = this.physics.add.staticGroup();
@@ -202,21 +203,30 @@
             localStorage.setItem(nick,score);
         }
 
+        function verificaLocalStorage(){
+            var rank = [];
+            if(localStorage.length>0){
+                for(i=0; i<localStorage.length;i++){
+                    rank.push({jogador:localStorage.key(i),pontuacao:localStorage.getItem(localStorage.key(i))});
+                }
+            }
+            console.log(rank);
+
+            rank.sort(function (a, b) {
+                if (a.pontuacao < b.pontuacao) {
+                    return 1;
+                }
+                if (a.pontuacao > b.pontuacao) {
+                    return -1;
+                }
+                // a must be equal to b
+                return 0;
+            });
+            console.log(rank);
+        }
+
         function hitBomb(player, bomb) {
-
-            // criando registro em localstorage
-            if(!localStorage.getItem('player_highScore')){
-                localStorage.setItem('player_highScore',0);
-            }
-            // atualizando local storage
-            if(highScore > localStorage.getItem('player_highScore')){
-                localStorage.setItem('player_highScore',highScore);
-            }else{
-                highScore = localStorage.getItem('player_highScore');
-            }
-
-
-
+           
 
             this.physics.pause();
             player.setTint(0xff0000);
@@ -231,3 +241,7 @@
 </body>
 
 </html>
+
+
+<!-- Site referência entrada de dados https://labs.phaser.io/edit.html?src=src/game%20objects/dom%20element/input%20test.js&v=3.20.0 -->
+<!-- Site referência Salvar local storage https://www.youtube.com/watch?v=CSfpEMWHnYg -->
