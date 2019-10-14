@@ -114,8 +114,7 @@
             bombs = this.physics.add.group();
 
             scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-            // gameOver = this.add.text(400, 200, 'GAME OVER', { fontSize: '32px', fill: '#000' });
-            // gameOver.setOrigin(0.5);
+
             this.physics.add.collider(player, platforms);
             this.physics.add.collider(stars, platforms);
             this.physics.add.collider(bombs, platforms);
@@ -228,11 +227,16 @@
         }
 
         function hitBomb(player, bomb) {
-            text = this.add.text(100, 55, '', { fontSize: '32px', fill: '#000' });
+            gameOver = this.add.text(400, 200, 'GAME OVER', { fontSize: '82px', fill: '#000' });
+            gameOver.setOrigin(0.5);
+            text = this.add.text(400, 290, '', { fontSize: '20px', fill: '#000' });
+            text.setOrigin(0.5);
+
+
             var jogadores = rank_jogador();
             var rank = [];
             for(i=0;i<jogadores.length;i++){
-                rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação'+ jogadores[i].pontuacao]);
+                rank.push(['Jogador: ' + jogadores[i].jogador + ' Pontuação: '+ jogadores[i].pontuacao]);
             }
 
             text.setText(rank);
