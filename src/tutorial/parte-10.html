@@ -57,6 +57,8 @@
         function preload() {
             // carrega template html de entrada de nick
             this.load.html('nameform', 'assets/nameform.html');
+            // carrega template html de entrada de nick
+            this.load.html('buttonreset', 'assets/buttonreset.html');
             // imagem de fundo rank
             this.load.image('rank', 'assets/rank.png');
 
@@ -154,13 +156,14 @@
                 }
             });
 
-
             this.tweens.add({
                 targets: element,
                 y: 300,
                 duration: 3000,
                 ease: 'Power3'
                 });
+
+            
 
         }
 
@@ -233,8 +236,10 @@
                 return 0;
             });
 
+
             return rank;
         }
+
 
         function hitBomb(player, bomb) {
             this.add.image(400, 300, 'rank');
@@ -265,6 +270,12 @@
                 }
             }
 
+            var btn = this.add.dom(400, 500).createFromCache('buttonreset');   
+            btn.addListener('click');
+            btn.on('click', function (event) {
+             // Recarrega a página
+                location.reload();
+            });
 
             // manda para exibição
             rankExibicao.setText(rank);
