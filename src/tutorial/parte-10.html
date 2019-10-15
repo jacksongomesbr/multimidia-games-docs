@@ -35,7 +35,7 @@
 
         var config = {
             type: Phaser.AUTO,
-            //adicionado
+            //Adicionado para criação formulario de entrada 
             parent: 'phaser-example',
             width: 800,
             height: 600,
@@ -46,7 +46,7 @@
                     debug: false
                 }
             },
-            //adicionado
+            //A estrutura 'dom' cria uma div do DOM Container posicionada sobre a parte superior da tela do jogo. Essa div é dimensionada para corresponder à tela e, se o tamanho da tela mudar, como resultado das configurações no Scale Manager, o contêiner dom será redimensionado de acordo.
             dom: {
                 createContainer: true
             },
@@ -72,11 +72,11 @@
 
 
         function preload() {
-            // carrega template html de entrada de nick
+            // Carrega template html de entrada de nick
             this.load.html('nameform', 'assets/nameform.html');
-            // carrega template html de entrada de nick
+            // Carrega template html de entrada de nick
             this.load.html('buttonreset', 'assets/buttonreset.html');
-            // imagem de fundo rank
+            // Imagem de fundo rank
             this.load.image('rank', 'assets/rank.png');
 
             this.load.image('sky', 'assets/sky.png');
@@ -253,7 +253,6 @@
             return rank;
         }
 
-
         function hitBomb(player, bomb) {
             this.add.image(400, 300, 'rank');
 
@@ -261,14 +260,14 @@
             rankExibicao = this.add.text(400, 195, 'RANK TOP 10', { fontSize: '20px', fill: '#000' });
             rankExibicao.setOrigin(0.5);
 
-            // variavel para exibição 
+            // Variavel para exibição dos resultados dos 10 melhores
             rankExibicao = this.add.text(400, 330, '', { fontSize: '19px', fill: '#000' });
             rankExibicao.setOrigin(0.5);
 
 
-            // varivel jogadores recebe lista ordenada da função rank_jogador
+            // Varivel jogadores recebe lista ordenada da função rank_jogador
             var jogadores = rank_jogador();
-            // seta os 10 melhores jogadores para uma nova variavel que será exibição em tela
+            // Seta os 10 melhores jogadores para uma nova variavel que será exibido em tela
             var rank = [];
             if(jogadores.length>=10){
                 for(i=0;i<10;i++){
@@ -279,7 +278,12 @@
                     rank.push(['Jogador: ' + jogadores[i].jogador + ' ('+ jogadores[i].pontuacao] + ' pontos)');
                 }
             }
+            
+            // Manda para exibição
+            rankExibicao.setText(rank);
 
+
+            // Cria button de reset
             var btn = this.add.dom(400, 470).createFromCache('buttonreset');   
             btn.addListener('click');
             btn.on('click', function (event) {
@@ -287,8 +291,8 @@
                 location.reload();
             });
 
-            // manda para exibição
-            rankExibicao.setText(rank);
+            
+            
 
             this.physics.pause();
             player.setTint(0xff0000);
@@ -305,6 +309,7 @@
 </html>
 
 
-<!-- Site referência entrada de dados https://labs.phaser.io/edit.html?src=src/game%20objects/dom%20element/input%20test.js&v=3.20.0 -->
+<!-- Site referência entrada de dados https://labs.phaser.io/edit.html?src=src/game%20objects/dom%20element/input%20test.js&v=3.20.0  -->
+<!-- Site referência entrada de dados https://rexrainbow.github.io/phaser3-rex-notes/docs/site/domelement/ -->
 <!-- Site referência Salvar local storage https://www.youtube.com/watch?v=CSfpEMWHnYg -->
 <!-- Site referência Ordenação https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort -->
