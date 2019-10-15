@@ -195,7 +195,7 @@
                 text = this.add.text(380, y, key + " => " + value, style);
                 y += 20;
             }
-            const restartButton = this.add.text(380, y+20, 'Restart Button !', style);
+            const restartButton = this.add.text(340, y+20, 'RESTART !', {fill: '0xffffff', fontFamily: 'Times New Roman'});
             restartButton.setInteractive();
 
             restartButton.on('pointerdown', () => { this.scene.restart(); gameOver = false; });
